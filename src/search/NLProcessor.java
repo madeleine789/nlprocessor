@@ -34,7 +34,7 @@ public class NLProcessor
     public Set<String> find(String word, WordVariant wordVariant)
     {
         Set<String> result = new HashSet<>();
-        SearchEngine searchEngine = new SearchEngine(word);
+        SearchEngine searchEngine = new SearchEngine(word, dictionaries);
         if (!searchEngine.startSearch())
             result.add(word);
         else

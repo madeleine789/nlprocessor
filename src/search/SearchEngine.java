@@ -1,9 +1,7 @@
 package search;
 
 import dictionary.Dict;
-import finder.DiminutiveFinder;
-import finder.InflectionFinder;
-import finder.SynonymFinder;
+import finder.Finder;
 import morfologik.stemming.Dictionary;
 import morfologik.stemming.DictionaryLookup;
 import morfologik.stemming.WordData;
@@ -23,7 +21,6 @@ public class SearchEngine
     protected String input;
     protected Set<String> results;
     protected Set<String> lexemes;
-    protected ResultsCollector resultsCollector;
     protected static Map<Dict, dictionary.Dictionary> dictionaries;
 
 
@@ -33,8 +30,6 @@ public class SearchEngine
         this.dictionaries = dictionaries;
         this.results = new HashSet<>();
         this.lexemes = searchForLexemes(input);
-        this.resultsCollector = new ResultsCollector(word);
-
     }
 
     public boolean startSearch()
@@ -43,7 +38,7 @@ public class SearchEngine
             return false;
         else
         {
-            resultsCollector.processPartialResults(lexemes);
+            results.addAll(lexemes);
             //search for the rest of stuff
             return true;
         }
@@ -53,22 +48,22 @@ public class SearchEngine
     {
         if (synonyms)
         {
-            SynonymFinder synonymFinder = new SynonymFinder(word, results, resultsCollector);
+            Finder synonymFinder = new Finder(word,dictionaries.get(Dict.SYNONYMS));
+            results.addAll(synonymFinder.getResults());
         }
         if (inflections)
         {
-            InflectionFinder synonymFinder = new InflectionFinder(word, results, resultsCollector);
+            Finder synonymFinder = new Finder(word,dictionaries.get(Dict.INFLECTIONS));
+            results.addAll(synonymFinder.getResults());
         }
         if (diminutives)
         {
-            DiminutiveFinder diminutiveFinder = new DiminutiveFinder(word, results, resultsCollector);
+            Finder synonymFinder = new Finder(word,dictionaries.get(Dict.DIMINUTIVES));
+            results.addAll(synonymFinder.getResults());
         }
 
-        /*
-        To be continued...
-         */
 
-        return resultsCollector.getFinalResults();
+        return results;
     }
 
     public Set<String> searchForLexemes(String word)

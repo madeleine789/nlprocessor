@@ -10,7 +10,7 @@ import java.util.Set;
 public class Dictionary extends HashMap<String,HashSet<String>>
 {
 
-    public HashSet<String> getWords(String word)
+    public HashSet<String> findWords(String word)
     {
         return this.get(word);
     }
