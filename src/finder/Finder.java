@@ -25,7 +25,10 @@ public class Finder
 
     private static void find(String searched)
     {
-        results.addAll(dictionary.findWords(searched));
+        if (dictionary.findWords(searched).isEmpty())
+            return;
+        else
+            results.addAll(dictionary.findWords(searched));
     }
 
     public Set<String> getResults()
@@ -33,7 +36,10 @@ public class Finder
         if (!results.isEmpty())
             return this.results;
         else
-            return null;
+        {
+            results.add(word);
+            return results;
+        }
     }
 
 

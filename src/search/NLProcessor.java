@@ -52,8 +52,9 @@ public class NLProcessor
         //Thread.sleep(10000);
         System.out.println(dictionaries.isEmpty());
 
-        nlp.findWords("dom", new WordVariant(false, false, true));
-
+        Set<String> result = nlp.findWords("dom", new WordVariant(false, false, true));
+        for (String s: result)
+            System.out.println(s);
     }
 
 

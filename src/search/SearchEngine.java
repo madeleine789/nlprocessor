@@ -20,7 +20,7 @@ public class SearchEngine
     protected static String word;
     protected String input;
     protected Set<String> results;
-    protected Set<String> lexemes;
+    protected Set<String> lexemes = new HashSet<>();
     protected static Map<Dict, dictionary.Dictionary> dictionaries;
 
 
@@ -144,7 +144,7 @@ public class SearchEngine
                 CharSequence stem = wordList.get(i).getStem();
                 StringBuilder sb = new StringBuilder(stem.length());
                 sb.append(stem);
-                System.out.println(stem);
+
                 lexemes.add(sb.toString());
             }
 
