@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="morfologik-fsa-1.9.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/morfologik-fsa-1.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/morfologik-polish-1.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/morfologik-stemming-1.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/morfologik-tools-1.9.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
