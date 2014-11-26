@@ -144,6 +144,7 @@ public class SearchEngine
                 CharSequence stem = wordList.get(i).getStem();
                 StringBuilder sb = new StringBuilder(stem.length());
                 sb.append(stem);
+                System.out.println(stem);
                 lexemes.add(sb.toString());
             }
 

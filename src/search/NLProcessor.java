@@ -31,7 +31,7 @@ public class NLProcessor
 
     }
 
-    public Set<String> find(String word, WordVariant wordVariant)
+    public Set<String> findWords(String word, WordVariant wordVariant)
     {
         Set<String> result = new HashSet<>();
         SearchEngine searchEngine = new SearchEngine(word, dictionaries);
@@ -52,6 +52,7 @@ public class NLProcessor
         //Thread.sleep(10000);
         System.out.println(dictionaries.isEmpty());
 
+        nlp.findWords("dom", new WordVariant(false, false, true));
 
     }
 
