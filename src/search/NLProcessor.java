@@ -1,7 +1,7 @@
 package search;
 
+import com.google.common.collect.Multimap;
 import dictionary.Dict;
-import dictionary.Dictionary;
 import dictionary.DictionaryLoader;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class NLProcessor
 {
     //private static search.NLProcessor NLProcessorInstance = null;
 
-    protected static Map<Dict, Dictionary> dictionaries = new HashMap<>();
+    protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries = new HashMap<>();
 
 
     protected NLProcessor() throws Exception
@@ -52,9 +52,9 @@ public class NLProcessor
         //Thread.sleep(10000);
         System.out.println(dictionaries.isEmpty());
 
-        Set<String> result = nlp.findWords("dom", new WordVariant(false, false, true));
-        for (String s: result)
-            System.out.println(s);
+        Multimap<String,HashSet<String>> d1 = dictionaries.get(Dict.INFLECTIONS);
+        Multimap<String,HashSet<String>> d2 = dictionaries.get(Dict.SYNONYMS);
+
     }
 
 

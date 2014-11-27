@@ -2,32 +2,32 @@ package dictionary; /**
  * Created by M on 2014-11-21.
  */
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 public class DictionaryLoader implements Runnable {
 
-    //private File file;
     private static String[] files = {"synonyms.txt", "inflections.txt"};    // , "diminutives.txt"};
-    protected static dictionary.Dictionary dictionary;
-    protected static Map<Dict, dictionary.Dictionary> dictionaries  = new HashMap<>();
-
+    protected static Multimap<String,HashSet<String>> dictionary;
+    protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries  = new HashMap<>();
+    protected static Multimap<String,HashSet<String>> multimap = ArrayListMultimap.create();
     public DictionaryLoader()
     {
-        this.dictionary = new dictionary.Dictionary();
+
     }
 
     private static class LineWorker implements Runnable
     {
         private final String line;
-        private static dictionary.Dictionary dictionary;
+        private static Multimap<String,HashSet<String>> dictionary;
 
-        public LineWorker(String line, dictionary.Dictionary dictionary)
+        public LineWorker(String line, Multimap<String,HashSet<String>> dictionary)
         {
             this.line = line;
             this.dictionary = dictionary;
@@ -44,39 +44,62 @@ public class DictionaryLoader implements Runnable {
                 for (int i = 1; i < partition.length; i++)
                     values.add(partition[i]);
                 dictionary.put(key, values);
+                multimap.put(key,values);
             }
             else
+            {
                 dictionary.put(line, new HashSet<>());
+                multimap.put(line, new HashSet<>());
+            }
+
 
         }
     }
 
-    private dictionary.Dictionary loadDictionary(File file) throws IOException {
+    private Multimap<String,HashSet<String>> loadDictionary(String file) throws Exception {
 
         long start = System.nanoTime();
-        dictionary.Dictionary dictionary = new dictionary.Dictionary();
+        Multimap<String,HashSet<String>> dictionary = ArrayListMultimap.create();
 
-        ExecutorService service = Executors.newFixedThreadPool(210);      //random 5 to 15 secs for inflections , max 0.6 secs for synonyms
-        //ExecutorService service = Executors.newCachedThreadPool();          //always around 6-8 secs for inflections
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
-        {
-            for (String line; (line = bufferedReader.readLine())!=null;)
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("resources", file));
+            System.out.println(lines.size());
+            for(String line : lines)
             {
-                service.execute(new LineWorker(line, dictionary));
+
+                if (line.contains(",")){
+                    String[] partition = line.split(",\\s");
+                    String key = partition[0];
+                    HashSet<String> values = new HashSet<>();
+                    for (int i = 1; i < partition.length; i++)
+                        values.add(partition[i]);
+                    dictionary.put(key, values);
+                    multimap.put(key,values);
+                }
+                else
+                {
+                    dictionary.put(line, new HashSet<>());
+                    multimap.put(line, new HashSet<>());
+                }
+
             }
+
+        } catch (IOException e){
+            e.printStackTrace();
         }
 
-        service.shutdown();
+
         long stop  = System.nanoTime();
-        System.out.println(file.getName() + " " + (stop - start)/1000000 + "ms");
+        System.out.println(file + " " + (stop - start)/1000000 + "ms");
+        System.out.println(file + " " + multimap.size());
         return dictionary;
     }
 
-    private static Map<Dict, dictionary.Dictionary>  loadDictionaries() throws IOException {
+    private static Map<Dict, Multimap<String,HashSet<String>>>  loadDictionaries() throws Exception {
         for(String file: files)
         {
             DictionaryLoader dictLoader = new DictionaryLoader();
-            dictionary.Dictionary dict = dictLoader.loadDictionary(new File(file));
+            Multimap<String,HashSet<String>> dict = dictLoader.loadDictionary(file);
             if (file == "synonyms.txt")
                 dictionaries.put(Dict.SYNONYMS , dict);
             else if (file == "inflections.txt")
@@ -90,14 +113,13 @@ public class DictionaryLoader implements Runnable {
 
     public void run()
     {
-        try
-        {
+        try {
             loadDictionaries();
 
-        } catch (IOException e) {}
+        } catch (Exception e) {}
     }
 
-    public static Map<Dict, dictionary.Dictionary> getDictionaries()
+    public static Map<Dict, Multimap<String,HashSet<String>>> getDictionaries()
     {
         return dictionaries;
     }
@@ -107,7 +129,7 @@ public class DictionaryLoader implements Runnable {
         return files;
     }
 
-    public  static void main(String[] args) throws IOException {
+    public  static void main(String[] args) throws Exception {
         long start = System.nanoTime();
         loadDictionaries();
         long stop  = System.nanoTime();

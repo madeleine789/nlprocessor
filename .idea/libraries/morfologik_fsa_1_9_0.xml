@@ -5,6 +5,7 @@
       <root url="jar://$PROJECT_DIR$/libs/morfologik-polish-1.9.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/morfologik-stemming-1.9.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/morfologik-tools-1.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/google-collections.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

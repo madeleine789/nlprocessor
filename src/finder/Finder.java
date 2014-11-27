@@ -1,22 +1,19 @@
 package finder;
 
-import dictionary.Dictionary;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.common.collect.Multimap;
+import java.util.*;
 
 /**
  * Created by mms on 2014-11-26.
  */
+
 public class Finder
 {
-    protected static Dictionary dictionary;
-    protected String word = null;
+    protected static Multimap<String,HashSet<String>> dictionary;
+    protected String word;
     protected  static Set<String> results = new HashSet<>();
 
-    public Finder(String word, Dictionary dictionary)
+    public Finder(String word, Multimap<String,HashSet<String>> dictionary)
     {
         this.dictionary = dictionary;
         this.word = word;
@@ -25,10 +22,10 @@ public class Finder
 
     private static void find(String searched)
     {
-        if (dictionary.findWords(searched).isEmpty())
-            return;
-        else
-            results.addAll(dictionary.findWords(searched));
+        if(dictionary.containsKey(searched) && dictionary.get(searched) != null)
+        {
+            //results.addAll(dictionary.get(searched));
+        }
     }
 
     public Set<String> getResults()
@@ -36,10 +33,7 @@ public class Finder
         if (!results.isEmpty())
             return this.results;
         else
-        {
-            results.add(word);
-            return results;
-        }
+            return Collections.emptySet();
     }
 
 

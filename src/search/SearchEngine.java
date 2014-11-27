@@ -1,5 +1,6 @@
 package search;
 
+import com.google.common.collect.Multimap;
 import dictionary.Dict;
 import finder.Finder;
 import morfologik.stemming.Dictionary;
@@ -21,10 +22,10 @@ public class SearchEngine
     protected String input;
     protected Set<String> results;
     protected Set<String> lexemes = new HashSet<>();
-    protected static Map<Dict, dictionary.Dictionary> dictionaries;
+    protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries;
 
 
-    public SearchEngine(String input,Map<Dict, dictionary.Dictionary> dictionaries)
+    public SearchEngine(String input,Map<Dict, Multimap<String,HashSet<String>>> dictionaries)
     {
         this.input = input;
         this.dictionaries = dictionaries;
