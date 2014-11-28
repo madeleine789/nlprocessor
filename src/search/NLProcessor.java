@@ -34,12 +34,14 @@ public class NLProcessor
 
     public Set<String> findWords(String word, WordVariant wordVariant)
     {
-        result.clear();
-        LexemeFinder lexemeFinder = new LexemeFinder(word);
 
-        if (!lexemeFinder.startSearch())
+        try
         {
-            result.add(word);
+            result.clear();
+            LexemeFinder lexemeFinder = new LexemeFinder(word);
+            if (!lexemeFinder.startSearch())
+            {
+                result.add(word);
             /*
             Mogloby byc potrzebne jakby PatternMatcher przekazywał wyrażenia kilkuwyrazowe
 
@@ -60,22 +62,28 @@ public class NLProcessor
             }
             */
 
-        }
-
-        else
-        {
-            Set<String> lexemes = lexemeFinder.getLexemes();
-            result.addAll(lexemes);
-            for(int i = 0; i < lexemes.size(); i++)
-            {
-                String searched = (String)lexemes.toArray()[i];
-                SearchEngine searchEngine = new SearchEngine(searched, dictionaries, wordVariant);
-                searchEngine.search(searched);
-                result.addAll(searchEngine.getResults());
-
             }
+
+            else
+            {
+                Set<String> lexemes = lexemeFinder.getLexemes();
+                result.addAll(lexemes);
+                for(int i = 0; i < lexemes.size(); i++)
+                {
+                    String searched = (String)lexemes.toArray()[i];
+                    SearchEngine searchEngine = new SearchEngine(searched, dictionaries, wordVariant);
+                    searchEngine.search(searched);
+                    result.addAll(searchEngine.getResults());
+
+                }
+            }
+        } catch (NullPointerException e) {
+
         }
-        return result;
+        finally {
+            return result;
+        }
+
     }
 
     public static void main(String[] args) throws Exception
@@ -91,7 +99,8 @@ public class NLProcessor
         System.out.println(nlp.findWords("szmatki", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("qwerty", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("koti", new WordVariant(false, true, false)));
-        System.out.println(nlp.findWords("czary mary", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords( "", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords( null, new WordVariant(true, false, false)));
     }
 
 
