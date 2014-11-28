@@ -13,10 +13,13 @@ public class Finder
     protected String word;
     protected  static Set<String> results = new HashSet<>();
 
+
+
     public Finder(String word, Multimap<String,HashSet<String>> dictionary)
     {
         this.dictionary = dictionary;
         this.word = word;
+        results.clear();
         find(this.word);
     }
 
@@ -25,10 +28,7 @@ public class Finder
         if(dictionary.containsKey(searched) && dictionary.get(searched) != null)
         {
             Collection<HashSet<String>> found = dictionary.get(searched);
-            for(HashSet<String> set : found)
-            {
-                results.addAll(set);
-            }
+            found.forEach(results::addAll);
         }
     }
 

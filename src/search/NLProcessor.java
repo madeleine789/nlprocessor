@@ -3,6 +3,7 @@ package search;
 import com.google.common.collect.Multimap;
 import dictionary.Dict;
 import dictionary.DictionaryLoader;
+import finder.LexemeFinder;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,7 +16,7 @@ public class NLProcessor
     //private static search.NLProcessor NLProcessorInstance = null;
 
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries = new HashMap<>();
-
+    protected static Set<String> result = new HashSet<>();
 
     protected NLProcessor() throws Exception
     {
@@ -33,32 +34,34 @@ public class NLProcessor
 
     public Set<String> findWords(String word, WordVariant wordVariant)
     {
-        Set<String> result = new HashSet<>();
-        SearchEngine searchEngine = new SearchEngine(word, dictionaries, wordVariant);
-        if (!searchEngine.startSearch())
+        result.clear();
+        LexemeFinder lexemeFinder = new LexemeFinder(word);
+
+        if (!lexemeFinder.startSearch())
             result.add(word);
         else
-            result = searchEngine.search(word);
+        {
+            Set<String> lexemes = lexemeFinder.getLexemes();
+            result.addAll(lexemes);
+            for(int i = 0; i < lexemes.size(); i++)
+            {
+                String searched = (String)lexemes.toArray()[i];
+                SearchEngine searchEngine = new SearchEngine(searched, dictionaries, wordVariant);
+                Set<String> set = searchEngine.search(searched);
+                result.addAll(searchEngine.getResults());
 
+            }
+        }
         return result;
     }
 
     public static void main(String[] args) throws Exception
     {
-
         NLProcessor nlp = new NLProcessor();
         nlp.loadDictionaries();
-        //System.out.println(nlp.findWords("robił", new WordVariant(true, true, false)));
-        //System.out.println(nlp.findWords("chłopak", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("mam", new WordVariant(true, true, false)));
 
-        //Multimap<String,HashSet<String>> d1 = dictionaries.get(Dict.INFLECTIONS);
-        //Multimap<String,HashSet<String>> d2 = dictionaries.get(Dict.SYNONYMS);
-
-        //System.out.println(d1.get("robić"));
-        //System.out.println(d2.get("blok"));
-
-        //System.out.println(nlp.findWords("robił", new WordVariant(true, true, false)));
-
+        System.out.println(nlp.findWords("picie", new WordVariant(true, true, false)));
     }
 
 

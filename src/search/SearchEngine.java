@@ -17,145 +17,184 @@ public class SearchEngine
 {
     protected static String word;
     protected String input;
-    protected Set<String> results;
+    protected Set<String> results = new HashSet<>();
     protected Set<String> lexemes = new HashSet<>();
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries;
     protected WordVariant wordVariant;
+    protected Map<String, Set<String>> result = new HashMap<>();
 
 
     public SearchEngine(String input,Map<Dict, Multimap<String,HashSet<String>>> dictionaries, WordVariant wordVariant)
     {
         this.input = input;
         this.dictionaries = dictionaries;
-        this.results = new HashSet<>();
-        this.lexemes = searchForLexemes(input);
         this.wordVariant = wordVariant;
+        this.results.clear();
     }
 
-    public boolean startSearch()
-    {
-        if (lexemes.isEmpty())
-            return false;
-        else
-        {
-            results.addAll(lexemes);
-            for(String lexeme : lexemes)
-            {
-                search(lexeme);
-            }
-            return true;
-        }
+
+    public Set<String> getResults() {
+        return results;
     }
+
 
     public Set<String> search(String word)
     {
-        Set<String> synonymsSet, inflectionSet, diminutiveSet;
+        Set<String> synonymsSet = new HashSet<>(), inflectionSet = new HashSet<>(), diminutiveSet = new HashSet<>();
         Finder synonymFinder, inflectionFinder, diminutiveFinder;
         boolean inflections = this.wordVariant.searchForInflections();
         boolean synonyms = this.wordVariant.searchForSynonyms();
         boolean diminutives = this.wordVariant.searchForDiminutives();
+        Set<String> searchResults = new HashSet<>();
+
 
         if (synonyms && inflections && diminutives)
         {
+
             synonymFinder = new Finder(word,dictionaries.get(Dict.SYNONYMS));
             synonymsSet = synonymFinder.getResults();
-            for(String synonym : synonymsSet)
-                results.addAll(new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults());
-            results.addAll(synonymsSet);
+            HashSet<String> partialResults1 =  new HashSet<>();
+            for(int i = 0; i < synonymsSet.size(); i++)
+            {
+                String synonym = (String) synonymsSet.toArray()[i];
+                Set<String> found = new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults();
+                partialResults1.addAll(found);
+            }
+            inflectionSet.addAll(partialResults1);
+
+            HashSet<String> partialResults2 =  new HashSet<>();
+            for(int i = 0; i < diminutiveSet.size(); i++)
+            {
+                String diminutive = (String) diminutiveSet.toArray()[i];
+                Set<String> found = new Finder(diminutive, dictionaries.get(Dict.SYNONYMS)).getResults();
+                partialResults2.addAll(found);
+            }
+            synonymsSet.addAll(partialResults2);
 
             diminutiveFinder = new Finder(word,dictionaries.get(Dict.DIMINUTIVES));
             diminutiveSet = diminutiveFinder.getResults();
-            for(String diminutive : diminutiveSet)
-                results.addAll(new Finder(diminutive, dictionaries.get(Dict.INFLECTIONS)).getResults());
-            results.addAll(diminutiveSet);
+            HashSet<String> partialResults3 =  new HashSet<>();
+            for(int i = 0; i < diminutiveSet.size(); i++)
+            {
+                String diminutive = (String) diminutiveSet.toArray()[i];
+                Set<String> found = new Finder(diminutive, dictionaries.get(Dict.INFLECTIONS)).getResults();
+                partialResults3.addAll(found);
+            }
+            inflectionSet.addAll(partialResults3);
+
+            HashSet<String> partialResults4 =  new HashSet<>();
+            for(int i = 0; i < synonymsSet.size(); i++)
+            {
+                String synonym = (String) synonymsSet.toArray()[i];
+                Set<String> found = new Finder(synonym, dictionaries.get(Dict.DIMINUTIVES)).getResults();
+                partialResults1.addAll(found);
+            }
+            diminutiveSet.addAll(partialResults4);
 
             inflectionFinder = new Finder(word,dictionaries.get(Dict.INFLECTIONS));
             inflectionSet = inflectionFinder.getResults();
-            results.addAll(inflectionSet);
+
+
+            searchResults.addAll(inflectionSet);
+            searchResults.addAll(synonymsSet);
+            searchResults.addAll(diminutiveSet);
+
         }
         else if (synonyms && inflections)
         {
             synonymFinder = new Finder(word,dictionaries.get(Dict.SYNONYMS));
             synonymsSet = synonymFinder.getResults();
-            for(String synonym : synonymsSet)
-                results.addAll(new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults());
-            results.addAll(synonymsSet);
+            HashSet<String> partialResults =  new HashSet<>();
+
+            for(int i = 0; i < synonymsSet.size(); i++)
+            {
+                String synonym = (String) synonymsSet.toArray()[i];
+                Set<String> found = new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults();
+                partialResults.addAll(found);
+            }
 
             inflectionFinder = new Finder(word,dictionaries.get(Dict.INFLECTIONS));
             inflectionSet = inflectionFinder.getResults();
-            results.addAll(inflectionSet);
+            inflectionSet.addAll(partialResults);
+            searchResults.addAll(inflectionSet);
+            searchResults.addAll(synonymsSet);
         }
         else if (diminutives && inflections)
         {
+
             diminutiveFinder = new Finder(word,dictionaries.get(Dict.DIMINUTIVES));
             diminutiveSet = diminutiveFinder.getResults();
-            for(String diminutive : diminutiveSet)
-                results.addAll(new Finder(diminutive, dictionaries.get(Dict.INFLECTIONS)).getResults());
-            results.addAll(diminutiveSet);
+            HashSet<String> partialResults =  new HashSet<>();
+
+            for(int i = 0; i < diminutiveSet.size(); i++)
+            {
+                String diminutive = (String) diminutiveSet.toArray()[i];
+                Set<String> found = new Finder(diminutive, dictionaries.get(Dict.INFLECTIONS)).getResults();
+                partialResults.addAll(found);
+            }
 
             inflectionFinder = new Finder(word,dictionaries.get(Dict.INFLECTIONS));
             inflectionSet = inflectionFinder.getResults();
-            results.addAll(inflectionSet);
+            inflectionSet.addAll(partialResults);
+            searchResults.addAll(diminutiveSet);
+            searchResults.addAll(inflectionSet);
+
         }
         else if (diminutives && synonyms)
         {
+
             synonymFinder = new Finder(word,dictionaries.get(Dict.SYNONYMS));
             synonymsSet = synonymFinder.getResults();
-            for(String synonym : synonymsSet)
-                results.addAll(new Finder(synonym, dictionaries.get(Dict.DIMINUTIVES)).getResults());
-            results.addAll(synonymsSet);
+            HashSet<String> partialResults1 =  new HashSet<>();
+            for(int i = 0; i < synonymsSet.size(); i++)
+            {
+                String synonym = (String) synonymsSet.toArray()[i];
+                Set<String> found = new Finder(synonym, dictionaries.get(Dict.DIMINUTIVES)).getResults();
+                partialResults1.addAll(found);
+            }
 
             diminutiveFinder = new Finder(word,dictionaries.get(Dict.DIMINUTIVES));
             diminutiveSet = diminutiveFinder.getResults();
-            for(String diminutive : diminutiveSet)
-                results.addAll(new Finder(diminutive, dictionaries.get(Dict.SYNONYMS)).getResults());
-            results.addAll(diminutiveSet);
+            HashSet<String> partialResults2 =  new HashSet<>();
+            for(int i = 0; i < diminutiveSet.size(); i++)
+            {
+                String diminutive = (String) diminutiveSet.toArray()[i];
+                Set<String> found = new Finder(diminutive, dictionaries.get(Dict.SYNONYMS)).getResults();
+                partialResults2.addAll(found);
+            }
+
+            synonymsSet.addAll(partialResults2);
+            diminutiveSet.addAll(partialResults1);
+            searchResults.addAll(diminutiveSet);
+            searchResults.addAll(synonymsSet);
         }
         else if (synonyms)
         {
             synonymFinder = new Finder(word,dictionaries.get(Dict.SYNONYMS));
             synonymsSet = synonymFinder.getResults();
-            results.addAll(synonymsSet);
+            searchResults.addAll(synonymsSet);
         }
         else if (inflections)
         {
             inflectionFinder = new Finder(word,dictionaries.get(Dict.INFLECTIONS));
             inflectionSet = inflectionFinder.getResults();
-            results.addAll(inflectionSet);
+            searchResults.addAll(inflectionSet);
         }
         else if (diminutives)
         {
             diminutiveFinder = new Finder(word,dictionaries.get(Dict.DIMINUTIVES));
             diminutiveSet = diminutiveFinder.getResults();
-            results.addAll(diminutiveSet);
+            searchResults.addAll(diminutiveSet);
         }
 
-
+        results.addAll(searchResults);
+        searchResults.clear();
         return results;
 
 
     }
 
-    public Set<String> searchForLexemes(String word)
-    {
-        Dictionary polish = Dictionary.getForLanguage("pl");
-        DictionaryLookup dl = new DictionaryLookup(polish);
-        List<WordData> wordList = dl.lookup(word);
-        if (wordList.isEmpty())
-            return Collections.emptySet();
-        else
-        {
-            for(int i = 0; i < wordList.size(); i++){
-                CharSequence stem = wordList.get(i).getStem();
-                StringBuilder sb = new StringBuilder(stem.length());
-                sb.append(stem);
 
-                lexemes.add(sb.toString());
-            }
-
-        }
-        return lexemes;
-    }
 
 
 }
