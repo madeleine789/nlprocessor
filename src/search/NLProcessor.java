@@ -38,7 +38,30 @@ public class NLProcessor
         LexemeFinder lexemeFinder = new LexemeFinder(word);
 
         if (!lexemeFinder.startSearch())
+        {
             result.add(word);
+            /*
+            Mogloby byc potrzebne jakby PatternMatcher przekazywał wyrażenia kilkuwyrazowe
+
+            if (wordVariant.searchForInflections())
+            {
+                Collection<HashSet<String>>  check = dictionaries.get(Dict.INFLECTIONS).get(word);
+                check.forEach(result::addAll);
+            }
+            if (wordVariant.searchForSynonyms())
+            {
+                Collection<HashSet<String>>  check = dictionaries.get(Dict.SYNONYMS).get(word);
+                check.forEach(result::addAll);
+            }
+            if (wordVariant.searchForDiminutives())
+            {
+                Collection<HashSet<String>>  check = dictionaries.get(Dict.DIMINUTIVES).get(word);
+                check.forEach(result::addAll);
+            }
+            */
+
+        }
+
         else
         {
             Set<String> lexemes = lexemeFinder.getLexemes();
@@ -47,7 +70,7 @@ public class NLProcessor
             {
                 String searched = (String)lexemes.toArray()[i];
                 SearchEngine searchEngine = new SearchEngine(searched, dictionaries, wordVariant);
-                Set<String> set = searchEngine.search(searched);
+                searchEngine.search(searched);
                 result.addAll(searchEngine.getResults());
 
             }
@@ -60,8 +83,15 @@ public class NLProcessor
         NLProcessor nlp = new NLProcessor();
         nlp.loadDictionaries();
         System.out.println(nlp.findWords("mam", new WordVariant(true, true, false)));
-
+        System.out.println(nlp.findWords("szczoty", new WordVariant(true, true, false)));
         System.out.println(nlp.findWords("picie", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("miłego", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("lubię", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("kotki", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("szmatki", new WordVariant(false, true, false)));
+        System.out.println(nlp.findWords("qwerty", new WordVariant(false, true, false)));
+        System.out.println(nlp.findWords("koti", new WordVariant(false, true, false)));
+        System.out.println(nlp.findWords("czary mary", new WordVariant(true, false, false)));
     }
 
 
