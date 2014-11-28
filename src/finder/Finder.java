@@ -24,7 +24,11 @@ public class Finder
     {
         if(dictionary.containsKey(searched) && dictionary.get(searched) != null)
         {
-            //results.addAll(dictionary.get(searched));
+            Collection<HashSet<String>> found = dictionary.get(searched);
+            for(HashSet<String> set : found)
+            {
+                results.addAll(set);
+            }
         }
     }
 

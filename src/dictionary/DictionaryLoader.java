@@ -16,45 +16,13 @@ public class DictionaryLoader implements Runnable {
     private static String[] files = {"synonyms.txt", "inflections.txt"};    // , "diminutives.txt"};
     protected static Multimap<String,HashSet<String>> dictionary;
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries  = new HashMap<>();
-    protected static Multimap<String,HashSet<String>> multimap = ArrayListMultimap.create();
+
+
     public DictionaryLoader()
     {
-
+        this.dictionary = ArrayListMultimap.create();
     }
 
-    private static class LineWorker implements Runnable
-    {
-        private final String line;
-        private static Multimap<String,HashSet<String>> dictionary;
-
-        public LineWorker(String line, Multimap<String,HashSet<String>> dictionary)
-        {
-            this.line = line;
-            this.dictionary = dictionary;
-        }
-
-        @Override
-        public void run()
-        {
-
-            if (line.contains(",")){
-                String[] partition = line.split(",\\s");
-                String key = partition[0];
-                HashSet<String> values = new HashSet<>();
-                for (int i = 1; i < partition.length; i++)
-                    values.add(partition[i]);
-                dictionary.put(key, values);
-                multimap.put(key,values);
-            }
-            else
-            {
-                dictionary.put(line, new HashSet<>());
-                multimap.put(line, new HashSet<>());
-            }
-
-
-        }
-    }
 
     private Multimap<String,HashSet<String>> loadDictionary(String file) throws Exception {
 
@@ -62,26 +30,26 @@ public class DictionaryLoader implements Runnable {
         Multimap<String,HashSet<String>> dictionary = ArrayListMultimap.create();
 
         try {
+
             List<String> lines = Files.readAllLines(Paths.get("resources", file));
-            System.out.println(lines.size());
+
             for(String line : lines)
             {
 
                 if (line.contains(",")){
+
                     String[] partition = line.split(",\\s");
                     String key = partition[0];
+
                     HashSet<String> values = new HashSet<>();
                     for (int i = 1; i < partition.length; i++)
                         values.add(partition[i]);
+
                     dictionary.put(key, values);
-                    multimap.put(key,values);
+
                 }
                 else
-                {
                     dictionary.put(line, new HashSet<>());
-                    multimap.put(line, new HashSet<>());
-                }
-
             }
 
         } catch (IOException e){
@@ -90,8 +58,7 @@ public class DictionaryLoader implements Runnable {
 
 
         long stop  = System.nanoTime();
-        System.out.println(file + " " + (stop - start)/1000000 + "ms");
-        System.out.println(file + " " + multimap.size());
+        System.out.println(file + "\ttime: " + (stop - start)/1000000 + "m\t size: " + dictionary.size());
         return dictionary;
     }
 

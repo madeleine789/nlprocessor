@@ -34,11 +34,11 @@ public class NLProcessor
     public Set<String> findWords(String word, WordVariant wordVariant)
     {
         Set<String> result = new HashSet<>();
-        SearchEngine searchEngine = new SearchEngine(word, dictionaries);
+        SearchEngine searchEngine = new SearchEngine(word, dictionaries, wordVariant);
         if (!searchEngine.startSearch())
             result.add(word);
         else
-            result = searchEngine.search(word, wordVariant.searchForInflections(), wordVariant.searchForSynonyms(), wordVariant.searchForDiminutives());
+            result = searchEngine.search(word);
 
         return result;
     }
@@ -47,13 +47,17 @@ public class NLProcessor
     {
 
         NLProcessor nlp = new NLProcessor();
-        System.out.println(dictionaries.isEmpty());
         nlp.loadDictionaries();
-        //Thread.sleep(10000);
-        System.out.println(dictionaries.isEmpty());
+        //System.out.println(nlp.findWords("robił", new WordVariant(true, true, false)));
+        //System.out.println(nlp.findWords("chłopak", new WordVariant(true, true, false)));
 
-        Multimap<String,HashSet<String>> d1 = dictionaries.get(Dict.INFLECTIONS);
-        Multimap<String,HashSet<String>> d2 = dictionaries.get(Dict.SYNONYMS);
+        //Multimap<String,HashSet<String>> d1 = dictionaries.get(Dict.INFLECTIONS);
+        //Multimap<String,HashSet<String>> d2 = dictionaries.get(Dict.SYNONYMS);
+
+        //System.out.println(d1.get("robić"));
+        //System.out.println(d2.get("blok"));
+
+        //System.out.println(nlp.findWords("robił", new WordVariant(true, true, false)));
 
     }
 

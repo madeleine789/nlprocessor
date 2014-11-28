@@ -8,10 +8,7 @@ import morfologik.stemming.DictionaryLookup;
 import morfologik.stemming.WordData;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by M on 2014-10-20.
@@ -23,14 +20,16 @@ public class SearchEngine
     protected Set<String> results;
     protected Set<String> lexemes = new HashSet<>();
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries;
+    protected WordVariant wordVariant;
 
 
-    public SearchEngine(String input,Map<Dict, Multimap<String,HashSet<String>>> dictionaries)
+    public SearchEngine(String input,Map<Dict, Multimap<String,HashSet<String>>> dictionaries, WordVariant wordVariant)
     {
         this.input = input;
         this.dictionaries = dictionaries;
         this.results = new HashSet<>();
         this.lexemes = searchForLexemes(input);
+        this.wordVariant = wordVariant;
     }
 
     public boolean startSearch()
@@ -40,16 +39,21 @@ public class SearchEngine
         else
         {
             results.addAll(lexemes);
-            //search for the rest of stuff
+            for(String lexeme : lexemes)
+            {
+                search(lexeme);
+            }
             return true;
         }
     }
 
-    public Set<String> search(String word, boolean inflections, boolean synonyms, boolean diminutives)
+    public Set<String> search(String word)
     {
         Set<String> synonymsSet, inflectionSet, diminutiveSet;
         Finder synonymFinder, inflectionFinder, diminutiveFinder;
-
+        boolean inflections = this.wordVariant.searchForInflections();
+        boolean synonyms = this.wordVariant.searchForSynonyms();
+        boolean diminutives = this.wordVariant.searchForDiminutives();
 
         if (synonyms && inflections && diminutives)
         {
@@ -138,7 +142,7 @@ public class SearchEngine
         DictionaryLookup dl = new DictionaryLookup(polish);
         List<WordData> wordList = dl.lookup(word);
         if (wordList.isEmpty())
-            return null;
+            return Collections.emptySet();
         else
         {
             for(int i = 0; i < wordList.size(); i++){

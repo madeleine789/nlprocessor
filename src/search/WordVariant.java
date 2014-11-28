@@ -9,7 +9,7 @@ public class WordVariant
     private boolean diminutives;
     private boolean inflections;
 
-    public WordVariant(boolean synonyms, boolean diminutives, boolean inflections) {
+    public WordVariant(boolean inflections, boolean synonyms, boolean diminutives) {
         this.synonyms = synonyms;
         this.diminutives = diminutives;
         this.inflections = inflections;
