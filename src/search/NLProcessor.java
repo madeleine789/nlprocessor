@@ -18,7 +18,7 @@ public class NLProcessor
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries = new HashMap<>();
     protected static Set<String> result = new HashSet<>();
 
-    public NLProcessor() throws Exception
+    public NLProcessor()
     {
         //loadDictionaries();
     }
