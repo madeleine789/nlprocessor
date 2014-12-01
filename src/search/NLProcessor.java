@@ -23,7 +23,7 @@ public class NLProcessor
         //loadDictionaries();
     }
 
-    private void loadDictionaries() throws IOException, InterruptedException {
+    public void loadDictionaries() throws IOException, InterruptedException {
         DictionaryLoader dictionaryLoader = new DictionaryLoader();
         Thread thread = new Thread(dictionaryLoader);
         thread.start();
@@ -39,7 +39,8 @@ public class NLProcessor
         {
             result.clear();
             LexemeFinder lexemeFinder = new LexemeFinder(word);
-            if (!lexemeFinder.startSearch())
+            boolean hasLexemes = lexemeFinder.startSearch();
+            if (!hasLexemes)
             {
                 result.add(word);
             /*
@@ -92,10 +93,17 @@ public class NLProcessor
         nlp.loadDictionaries();
         System.out.println(nlp.findWords("mam", new WordVariant(true, true, false)));
         System.out.println(nlp.findWords("szczoty", new WordVariant(true, true, false)));
+        long start = System.nanoTime();
         System.out.println(nlp.findWords("picie", new WordVariant(true, true, false)));
+        long stop  = System.nanoTime();
+        System.out.println("TOTAL: " + (stop - start)/1000000 + "ms");
         System.out.println(nlp.findWords("miłego", new WordVariant(true, false, false)));
-        System.out.println(nlp.findWords("lubię", new WordVariant(true, false, false)));
-        System.out.println(nlp.findWords("kotki", new WordVariant(true, false, false)));
+        start = System.nanoTime();
+        System.out.println(nlp.findWords("lubię", new WordVariant(true, true, false)));
+
+        System.out.println(nlp.findWords("kotki", new WordVariant(true, true, false)));
+        stop  = System.nanoTime();
+        System.out.println("TOTAL: " + (stop - start)/1000000 + "ms");
         System.out.println(nlp.findWords("szmatki", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("qwerty", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("koti", new WordVariant(false, true, false)));
