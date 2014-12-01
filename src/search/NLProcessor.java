@@ -18,7 +18,7 @@ public class NLProcessor
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries = new HashMap<>();
     protected static Set<String> result = new HashSet<>();
 
-    protected NLProcessor() throws Exception
+    public NLProcessor() throws Exception
     {
         //loadDictionaries();
     }
@@ -91,30 +91,20 @@ public class NLProcessor
     {
         NLProcessor nlp = new NLProcessor();
         nlp.loadDictionaries();
-        System.out.println(nlp.findWords("mam", new WordVariant(true, true, false)));
-        System.out.println(nlp.findWords("szczoty", new WordVariant(true, true, false)));
-        long start = System.nanoTime();
-        System.out.println(nlp.findWords("picie", new WordVariant(true, true, false)));
-        long stop  = System.nanoTime();
-        System.out.println("TOTAL: " + (stop - start)/1000000 + "ms");
-        System.out.println(nlp.findWords("miłego", new WordVariant(true, false, false)));
-        start = System.nanoTime();
-        System.out.println(nlp.findWords("lubię", new WordVariant(true, true, false)));
 
-        System.out.println(nlp.findWords("kotki", new WordVariant(true, true, false)));
-        stop  = System.nanoTime();
-        System.out.println("TOTAL: " + (stop - start)/1000000 + "ms");
-        System.out.println(nlp.findWords("szmatki", new WordVariant(false, true, false)));
-        System.out.println(nlp.findWords("qwerty", new WordVariant(false, true, false)));
-        System.out.println(nlp.findWords("koti", new WordVariant(false, true, false)));
+        System.out.println(nlp.findWords("czasem", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("lackadaisical", new WordVariant(true, true, false)));
+
+        System.out.println(nlp.findWords("kotki", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("exhilarated", new WordVariant(true, false, false)));
+
+        System.out.println(nlp.findWords("bonanzy", new WordVariant(false, true, false)));
+        System.out.println(nlp.findWords("perpendicular", new WordVariant(false, true, false)));
+
         System.out.println(nlp.findWords( "", new WordVariant(true, false, false)));
         System.out.println(nlp.findWords( null, new WordVariant(true, false, false)));
 
 
-        System.out.println(new LexemeFinder("kotki").searchForLexemes());
-        System.out.println(new LexemeFinder("lubię").searchForLexemes());
-        System.out.println(new LexemeFinder("młotki").searchForLexemes());
-        System.out.println(new LexemeFinder("asdfghjkl").searchForLexemes());
     }
 
 

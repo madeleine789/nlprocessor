@@ -33,5 +33,14 @@ public class LexemeFinderTest
     @Test
     public void testStartSearch()
     {
+        LexemeFinder lf = new LexemeFinder("kotki");
+        boolean expected = false;
+        boolean result = lf.searchForLexemes().isEmpty();
+        assertEquals(expected, result);
+
+        lf = new LexemeFinder("asdfghjkl");
+        expected = true;
+        result = lf.searchForLexemes().isEmpty();
+        assertEquals(expected,result);
     }
 }
