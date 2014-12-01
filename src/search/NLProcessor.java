@@ -109,6 +109,12 @@ public class NLProcessor
         System.out.println(nlp.findWords("koti", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords( "", new WordVariant(true, false, false)));
         System.out.println(nlp.findWords( null, new WordVariant(true, false, false)));
+
+
+        System.out.println(new LexemeFinder("kotki").searchForLexemes());
+        System.out.println(new LexemeFinder("lubię").searchForLexemes());
+        System.out.println(new LexemeFinder("młotki").searchForLexemes());
+        System.out.println(new LexemeFinder("asdfghjkl").searchForLexemes());
     }
 
 

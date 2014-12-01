@@ -34,7 +34,7 @@ public class LexemeFinder
         return lexemes;
     }
 
-    public Set<String> searchForLexemes(String word)
+    public Set<String> searchForLexemes()
     {
         Dictionary polish = Dictionary.getForLanguage("pl");
         DictionaryLookup dl = new DictionaryLookup(polish);
@@ -56,7 +56,7 @@ public class LexemeFinder
     }
     public boolean startSearch()
     {
-        lexemes = searchForLexemes(word);
+        lexemes = searchForLexemes();
         if (lexemes.isEmpty())
             return false;
         else
@@ -64,4 +64,5 @@ public class LexemeFinder
             return true;
         }
     }
+
 }
