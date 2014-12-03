@@ -90,21 +90,30 @@ public class NLProcessor
     public static void main(String[] args) throws Exception
     {
         NLProcessor nlp = new NLProcessor();
-        nlp.loadDictionaries();
+        //nlp.loadDictionaries();
+        Thread.sleep(10000);
 
         System.out.println(nlp.findWords("czasem", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("czasem", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("czasem", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("lackadaisical", new WordVariant(true, true, false)));
 
+        System.out.println(nlp.findWords("kotki", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("kotki", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("kotki", new WordVariant(true, false, false)));
         System.out.println(nlp.findWords("exhilarated", new WordVariant(true, false, false)));
 
-        System.out.println(nlp.findWords("bonanzy", new WordVariant(false, true, false)));
+        System.out.println(nlp.findWords("bonanza", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("bonanza", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("bonanza", new WordVariant(false, true, false)));
         System.out.println(nlp.findWords("perpendicular", new WordVariant(false, true, false)));
 
         System.out.println(nlp.findWords( "", new WordVariant(true, false, false)));
         System.out.println(nlp.findWords( null, new WordVariant(true, false, false)));
 
-
+        System.out.println(nlp.findWords("zezwalać", new WordVariant(true, true, false)));
+        System.out.println(nlp.findWords("zezwalać", new WordVariant(true, false, false)));
+        System.out.println(nlp.findWords("zezwalać", new WordVariant(false, true, false)));
         Random r = new Random();
         System.out.println(r.nextInt(151238));
 

@@ -56,9 +56,16 @@ public class SearchEngine
             HashSet<String> partialResults1 =  new HashSet<>();
             for(int i = 0; i < synonymsSet.size(); i++)
             {
+
                 String synonym = (String) synonymsSet.toArray()[i];
-                Set<String> found = new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults();
-                partialResults1.addAll(found);
+                if(synonym.contains(" "))
+                    partialResults1.add(synonym);
+                else
+                {
+                    Set<String> found = new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults();
+                    partialResults1.addAll(found);
+                }
+
             }
             inflectionSet.addAll(partialResults1);
 
@@ -109,8 +116,14 @@ public class SearchEngine
             for(int i = 0; i < synonymsSet.size(); i++)
             {
                 String synonym = (String) synonymsSet.toArray()[i];
-                Set<String> found = new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults();
-                partialResults.addAll(found);
+                if(synonym.contains(" "))
+                    partialResults.add(synonym);
+                else
+                {
+                    Set<String> found = new Finder(synonym, dictionaries.get(Dict.INFLECTIONS)).getResults();
+                    partialResults.addAll(found);
+                }
+
             }
 
             inflectionFinder = new Finder(word,dictionaries.get(Dict.INFLECTIONS));
@@ -118,6 +131,7 @@ public class SearchEngine
             inflectionSet.addAll(partialResults);
             searchResults.addAll(inflectionSet);
             searchResults.addAll(synonymsSet);
+            searchResults.add(word);
         }
         else if (diminutives && inflections)
         {
@@ -148,9 +162,16 @@ public class SearchEngine
             HashSet<String> partialResults1 =  new HashSet<>();
             for(int i = 0; i < synonymsSet.size(); i++)
             {
+
                 String synonym = (String) synonymsSet.toArray()[i];
-                Set<String> found = new Finder(synonym, dictionaries.get(Dict.DIMINUTIVES)).getResults();
-                partialResults1.addAll(found);
+                if(synonym.contains(" "))
+                    partialResults1.add(synonym);
+                else
+                {
+                    Set<String> found = new Finder(synonym, dictionaries.get(Dict.DIMINUTIVES)).getResults();
+                    partialResults1.addAll(found);
+                }
+
             }
 
             diminutiveFinder = new Finder(word,dictionaries.get(Dict.DIMINUTIVES));
@@ -167,6 +188,7 @@ public class SearchEngine
             diminutiveSet.addAll(partialResults1);
             searchResults.addAll(diminutiveSet);
             searchResults.addAll(synonymsSet);
+            searchResults.add(word);
         }
         else if (synonyms)
         {
