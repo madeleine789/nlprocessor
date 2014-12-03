@@ -19,10 +19,11 @@ import static org.junit.Assert.assertEquals;
 public class NLProcessorTest
 {
 
-    protected NLProcessor nlp = new NLProcessor();
+    protected NLProcessor nlp;
 
     @Test
     public void testLoadDictionaries() throws Exception {
+        nlp  = new NLProcessor();
         nlp.loadDictionaries();
     }
     /*
@@ -98,7 +99,6 @@ public class NLProcessorTest
         assertEquals(expected3,result3);
 
         Set<String> expected4 = new HashSet<>(Arrays.asList("qwert"));
-        System.out.println(nlp.findWords("qwert", new WordVariant(true, false, false)));
         Set<String> result4 = nlp.findWords("qwert", new WordVariant(true, false, false));
         assertEquals(expected4,result4);
 

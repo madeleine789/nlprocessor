@@ -17,23 +17,23 @@ public class NLProcessor
 
     protected static Map<Dict, Multimap<String,HashSet<String>>> dictionaries = new HashMap<>();
     protected static Set<String> result = new HashSet<>();
+    protected DictionaryLoader dictionaryLoader;
 
-    public NLProcessor()
+    public NLProcessor() throws Exception
     {
-        //loadDictionaries();
+        loadDictionaries();
     }
 
-    public void loadDictionaries() throws IOException, InterruptedException {
+    public void loadDictionaries() throws IOException, InterruptedException
+    {
         DictionaryLoader dictionaryLoader = new DictionaryLoader();
         Thread thread = new Thread(dictionaryLoader);
         thread.start();
-        thread.join();
-        dictionaries = dictionaryLoader.getDictionaries();
-
     }
 
     public Set<String> findWords(String word, WordVariant wordVariant)
     {
+        dictionaries = dictionaryLoader.getDictionaries();
 
         try
         {
@@ -103,6 +103,10 @@ public class NLProcessor
 
         System.out.println(nlp.findWords( "", new WordVariant(true, false, false)));
         System.out.println(nlp.findWords( null, new WordVariant(true, false, false)));
+
+
+        Random r = new Random();
+        System.out.println(r.nextInt(151238));
 
 
     }

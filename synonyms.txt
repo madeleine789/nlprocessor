@@ -38496,20 +38496,7 @@ kortezanin, kortezan, famulus
 melomanka
 rusofilizm, rusofilstwo, moskalofilizm, moskalofilstwo
 najmitka
-CZASOWNIK STANOWY NDK
-CZASOWNIK - STAN NDK oznaczający stan fizyczny
-CZASOWNIK - STAN NDK oznaczający stan emocjonalny
-CZASOWNIK - STAN NDK oznaczający relacje ponadczasowe i abstrakcyjne
-CZASOWNIK ZDARZENIOWY NDK
-CZASOWNIK CZYNNOŚCIOWY NDK
-CZASOWNIK PROCESYWNY NDK
-CZASOWNIK PROCESYWNY DK
-CZASOWNIK DZIAŁANIA NDK
-CZASOWNIK DZIAŁANIA DK
-CZASOWNIK OZNACZAJĄCY WYPADEK DK
-CZASOWNIK OZNACZAJĄCY AKT DK
-robić _CZYNNOŚĆ_
-zrobić _AKT_ DK
+robić, zrobić
 pójść
 wydostać się
 drzeworytnia
@@ -150256,7 +150243,7 @@ styryjski
 Styria
 olbora, orbora
 pedałówka, pederastka
-harmonia pedałowa , pedałówka
+harmonia pedałowa, pedałówka
 sulejowski
 Sulejów
 pedałówka

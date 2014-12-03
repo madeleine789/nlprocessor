@@ -62,7 +62,7 @@ public class DictionaryLoader implements Runnable {
         return dictionary;
     }
 
-    private static Map<Dict, Multimap<String,HashSet<String>>>  loadDictionaries() throws Exception {
+    private synchronized static Map<Dict, Multimap<String,HashSet<String>>>  loadDictionaries() throws Exception {
         for(String file: files)
         {
             DictionaryLoader dictLoader = new DictionaryLoader();
