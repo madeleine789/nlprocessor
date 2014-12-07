@@ -33,6 +33,7 @@ public class DictionaryLoader implements Runnable {
 
             List<String> lines = Files.readAllLines(Paths.get("resources", file));
 
+
             for(String line : lines)
             {
 
