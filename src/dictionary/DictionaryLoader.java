@@ -24,7 +24,7 @@ public class DictionaryLoader implements Runnable {
     }
 
 
-    private Multimap<String,HashSet<String>> loadDictionary(String file) throws Exception {
+    private synchronized Multimap<String,HashSet<String>> loadDictionary(String file) throws Exception {
 
         long start = System.nanoTime();
         Multimap<String,HashSet<String>> dictionary = ArrayListMultimap.create();
